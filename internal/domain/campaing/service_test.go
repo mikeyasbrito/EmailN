@@ -2,6 +2,7 @@ package campaing
 
 import (
 	"EmailN/internal/contract"
+	"EmailN/internalerrors"
 	"errors"
 	"testing"
 
@@ -67,7 +68,7 @@ func Test_Create_ValidateDomainError(t *testing.T) {
 	assert.Equal("name is required", err.Error())
 }
 
-func Test_Create_ValidateRepository(t *testing.T) {
+func Test_Create_ValidateRepositorySave(t *testing.T) {
 	assert := assert.New(t)
 	repositoryMock := new(repositoryMock)
 	repositoryMock.On("Save", mock.Anything).Return(errors.New("error to save on database"))
@@ -75,7 +76,5 @@ func Test_Create_ValidateRepository(t *testing.T) {
 
 	_, err := service.Create(newCampaing)
 
-	assert.Equal("error to save on database", err.Error())
-
-	repositoryMock.AssertExpectations(t)
+	assert.True(errors.Is(internalerrors.ErrInternal, err))
 }
