@@ -4,13 +4,15 @@ import (
 	"testing"
 	"time"
 
+	"github.com/jaswdr/faker"
 	"github.com/stretchr/testify/assert"
 )
 
 var (
 	name     = "Campaing X"
-	content  = "body"
+	content  = "body Hi!"
 	contacts = []string{"email1@e.com", "email2@e.com"}
+	fake     = faker.New()
 )
 
 func Test_NewCampaing_CreateCampaing(t *testing.T) {
@@ -40,26 +42,50 @@ func Test_NewCampaing_CreatedOnMustBeNow(t *testing.T) {
 	assert.Greater(campaing.CreatedOn, now)
 }
 
-func Test_NewCampaing_MustValidateName(t *testing.T) {
+func Test_NewCampaing_MustValidateNameMin(t *testing.T) {
 	assert := assert.New(t)
 
 	_, err := NewCampaing("", content, contacts)
 
-	assert.Equal("name is required", err.Error())
+	assert.Equal("name is required with min 5", err.Error())
 }
 
-func Test_NewCampaing_MustValidateContent(t *testing.T) {
+func Test_NewCampaing_MustValidateNameMax(t *testing.T) {
+	assert := assert.New(t)
+
+	_, err := NewCampaing(fake.Lorem().Text(30), content, contacts)
+
+	assert.Equal("name is required with max 24", err.Error())
+}
+
+func Test_NewCampaing_MustValidateContentMin(t *testing.T) {
 	assert := assert.New(t)
 
 	_, err := NewCampaing(name, "", contacts)
 
-	assert.Equal("content is required", err.Error())
+	assert.Equal("content is required with min 5", err.Error())
+}
+
+func Test_NewCampaing_MustValidateContentMax(t *testing.T) {
+	assert := assert.New(t)
+
+	_, err := NewCampaing(name, fake.Lorem().Text(1150), contacts)
+
+	assert.Equal("content is required with max 1024", err.Error())
+}
+
+func Test_NewCampaing_MustValidateContactsMin(t *testing.T) {
+	assert := assert.New(t)
+
+	_, err := NewCampaing(name, content, nil)
+
+	assert.Equal("contacts is required with min 1", err.Error())
 }
 
 func Test_NewCampaing_MustValidateContacts(t *testing.T) {
 	assert := assert.New(t)
 
-	_, err := NewCampaing(name, content, []string{})
+	_, err := NewCampaing(name, content, []string{"email_invalid"})
 
-	assert.Equal("contacts is required", err.Error())
+	assert.Equal("email is invalid", err.Error())
 }

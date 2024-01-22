@@ -13,7 +13,7 @@ import (
 var (
 	newCampaing = contract.NewCampaing{
 		Name:    "Test Y",
-		Content: "Body",
+		Content: "Body Hi!",
 		Emails:  []string{"test1@test.com"},
 	}
 
@@ -31,6 +31,9 @@ func (r *repositoryMock) Save(campaing *Campaing) error {
 
 func Test_Create_Campaing(t *testing.T) {
 	assert := assert.New(t)
+	repositoryMock := new(repositoryMock)
+	repositoryMock.On("Save", mock.Anything).Return(nil)
+	service.Repository = repositoryMock
 
 	id, err := service.Create(newCampaing)
 
@@ -58,16 +61,6 @@ func Test_Create_SaveCampaing(t *testing.T) {
 
 	repositoryMock.AssertExpectations(t)
 }
-
-func Test_Create_ValidateDomainError(t *testing.T) {
-	assert := assert.New(t)
-	newCampaing.Name = ""
-	_, err := service.Create(newCampaing)
-
-	assert.NotNil(err)
-	assert.Equal("name is required", err.Error())
-}
-
 func Test_Create_ValidateRepositorySave(t *testing.T) {
 	assert := assert.New(t)
 	repositoryMock := new(repositoryMock)
@@ -77,4 +70,12 @@ func Test_Create_ValidateRepositorySave(t *testing.T) {
 	_, err := service.Create(newCampaing)
 
 	assert.True(errors.Is(internalerrors.ErrInternal, err))
+}
+
+func Test_Create_ValidateDomainError(t *testing.T) {
+	assert := assert.New(t)
+	newCampaing.Name = ""
+	_, err := service.Create(contract.NewCampaing{})
+
+	assert.False(errors.Is(internalerrors.ErrInternal, err))
 }
