@@ -1,0 +1,7 @@
+POST  http://localhost:3000/campaings
+
+{
+    "name": "mikeyas",
+    "content": "change password",
+    "emails": ["test@test.com.br"]
+}
