@@ -26,5 +26,6 @@ func main() {
 	}
 	r.Post("/campaings", endpoints.HandlerError(handler.CampaingPost))
 	r.Get("/campaings", endpoints.HandlerError(handler.CampaingGet))
+
 	http.ListenAndServe(":3000", r)
 }
