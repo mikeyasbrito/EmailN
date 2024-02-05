@@ -16,3 +16,7 @@ func (c *CampaingRepository) Save(campaing *campaing.Campaing) error {
 func (c *CampaingRepository) Get() ([]campaing.Campaing, error) {
 	return c.campaings, nil
 }
+
+func (c *CampaingRepository) GetBy(id string) (*campaing.Campaing, error) {
+	return nil, nil
+}

@@ -34,6 +34,11 @@ func (r *repositoryMock) Get() ([]Campaing, error) {
 	return nil, nil
 }
 
+func (r *repositoryMock) GetBy(id string) (*Campaing, error) {
+	//args := r.Called(campaing)
+	return nil, nil
+}
+
 func Test_Create_Campaing(t *testing.T) {
 	assert := assert.New(t)
 	repositoryMock := new(repositoryMock)
