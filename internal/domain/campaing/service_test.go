@@ -92,7 +92,6 @@ func Test_Create_ValidateDomainError(t *testing.T) {
 
 	assert.False(errors.Is(internalerrors.ErrInternal, err))
 }
-
 func Test_GetById_returnCampaing(t *testing.T) {
 	assert := assert.New(t)
 	campaing, _ := NewCampaing(newCampaing.Name, newCampaing.Content, newCampaing.Emails)

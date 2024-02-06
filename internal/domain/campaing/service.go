@@ -29,6 +29,7 @@ func (s *ServiceImp) Create(newCampaing contract.NewCampaing) (string, error) {
 }
 
 func (s *ServiceImp) GetBy(id string) (*contract.CampaingResponse, error) {
+
 	campaing, err := s.Repository.GetBy(id)
 
 	if err != nil {
